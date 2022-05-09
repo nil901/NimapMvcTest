@@ -1,0 +1,103 @@
+﻿@model Nimapcurdopration.Models.PersonViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+
+    <style>
+        .pagination > li > a, .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+
+                    <th>Product Id</th>
+                    <th>Product Name</th>
+                    <th>Cat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--Binding the data in the List-->
+                @if (Model.ListPerson != null)
+                {
+                    for (int i = 0; i < Model.ListPerson.Count; i++)
+                    {
+                        <tr>
+
+                            <td>@Model.ListPerson[i].FirstName</td>
+                            <td>@Model.ListPerson[i].MiddleName</td>
+                            <td>@Model.ListPerson[i].LastName</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <!-- Paging -->
+        @if (Model.pager.EndPage > 1)
+        {
+            <ul class="pagination">
+                <!--If Current page is not the First Page, we will show Button/Link to go First or on Previous page-->
+                @if (Model.pager.CurrentPage > 1)
+                {
+                    <li>
+                        <a href="~/Home/pagination">First</a>
+                    </li>
+                    <li>
+                        <a href="~/Home/pagination?page=@(Model.pager.CurrentPage - 1)">Previous</a>
+                    </li>
+                }
+                <!--Paging from StartPage to the end Page-->
+                @for (var page = Model.pager.StartPage; page <= Model.pager.EndPage; page++)
+                {
+                    <li class="@(page == Model.pager.CurrentPage ? "active" : "")">
+                        <a href="~/Home/pagination?page=@page">@page</a>
+                    </li>
+                }
+                <!--If Current Page is not the Last Page then show Next and Last Button/link on Paging-->
+                @if (Model.pager.CurrentPage < Model.pager.TotalPages)
+                {
+                    <li>
+                        <a href="~/Home/pagination?page=@(Model.pager.CurrentPage + 1)">Next</a>
+                    </li>
+                    <li>
+                        <a href="~/Home/pagination?page=@(Model.pager.TotalPages)">Last</a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</body>
+</html>

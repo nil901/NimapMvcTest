@@ -1,0 +1,89 @@
+USE [Product_Category]
+GO
+/****** Object:  Table [dbo].[Category]    Script Date: 5/9/2022 3:36:30 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Category](
+	[Cat_Id1] [int] IDENTITY(1,1) NOT NULL,
+	[Cat_Id] [int] NOT NULL,
+	[Cat_Name] [nvarchar](50) NULL
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Product]    Script Date: 5/9/2022 3:36:30 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Product](
+	[ProductID1] [int] IDENTITY(1,1) NOT NULL,
+	[ProductID] [int] NULL,
+	[ProductName] [nvarchar](50) NULL,
+	[Cat_id] [int] NULL,
+ CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED 
+(
+	[ProductID1] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET IDENTITY_INSERT [dbo].[Category] ON 
+
+GO
+INSERT [dbo].[Category] ([Cat_Id1], [Cat_Id], [Cat_Name]) VALUES (2, 1, N'cat 1')
+GO
+INSERT [dbo].[Category] ([Cat_Id1], [Cat_Id], [Cat_Name]) VALUES (3, 2, N'cat 2')
+GO
+INSERT [dbo].[Category] ([Cat_Id1], [Cat_Id], [Cat_Name]) VALUES (4, 3, N'electroic')
+GO
+SET IDENTITY_INSERT [dbo].[Category] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Product] ON 
+
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (1, 1, N'abcdd', 2)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (2, 2, N'efg', 2)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (4, 3, N'laptop', 3)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (5, 4, N'realmext', 3)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (6, 5, N'ljdljd', 3)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (7, 6, N'kkk', 2)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (8, 7, N'23', 3)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (9, 8, N'5', 3)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (10, 9, N'hifdshfdhi', 1)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (11, 10, N'4959dskdffd', 3)
+GO
+INSERT [dbo].[Product] ([ProductID1], [ProductID], [ProductName], [Cat_id]) VALUES (12, 11, N'hjhkkhkh', 3)
+GO
+SET IDENTITY_INSERT [dbo].[Product] OFF
+GO
+/****** Object:  StoredProcedure [dbo].[getpaggination]    Script Date: 5/9/2022 3:36:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE procedure [dbo].[getpaggination]
+(
+@OffsetValue int,
+@PagingSize int
+)
+as
+Begin
+Select ProductID,ProductName, Cat_Name category from Product,Category  where  Product.Cat_id = Category.Cat_id order by ProductID 
+OFFSET @OffsetValue ROWS FETCH NEXT @PagingSize ROWS ONLY
+
+Select count(ProductID) as TotalRecords from Product,Category  where  Product.Cat_id = Category.Cat_id
+End
+
+GO
